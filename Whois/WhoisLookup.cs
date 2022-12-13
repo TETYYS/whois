@@ -3,7 +3,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Tokens.Transformers;
 using Tokens.Validators;
-using Whois.Logging;
 using Whois.Net;
 using Whois.Parsers;
 using Whois.Servers;
@@ -15,8 +14,6 @@ namespace Whois
     /// </summary>
     public class WhoisLookup : IWhoisLookup
     {
-        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
-        
         /// <summary>
         /// The default <see cref="WhoisOptions"/> to use for this instance
         /// </summary>
@@ -121,8 +118,6 @@ namespace Whois
                 throw new WhoisException($"WHOIS Query Format Error: {request.Query}");
             }
 
-            Log.Debug("Looking up WHOIS response for: {0}", hostName.Value);
-
             // Set our starting point
             WhoisResponse response;
             if (string.IsNullOrEmpty(request.WhoisServer))
@@ -186,8 +181,6 @@ namespace Whois
             if (query.EndsWith("jp")) query += "/e";    // Return English .jp results
 
             var content = await TcpReader.Read(url, 43, query, request.Encoding, request.TimeoutSeconds);
-
-            Log.Debug("Lookup {0}: Downloaded {1:###,###,##0} byte(s) from {2}.", request.Query, content.Length, url);
 
             return content;
         }
