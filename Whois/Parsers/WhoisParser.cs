@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Tokens;
+using Tokens.Logging;
 using Tokens.Transformers;
 using Tokens.Validators;
 using Whois.Parsers.Fixups;
@@ -24,7 +25,10 @@ namespace Whois.Parsers
         /// </summary>
         public WhoisParser()
         {
-            matcher = new TokenMatcher();
+			LogProvider.IsDisabled = true;
+			matcher = new TokenMatcher(new TokenizerOptions {
+                EnableLogging = false
+            });
             reader = new ResourceReader();
             statusParser = new WhoisStatusParser();
             FixUps = new List<IFixup>();

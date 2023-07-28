@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Tokens;
+using Tokens.Logging;
+
 using Whois.Net;
 using Whois.Parsers;
 
@@ -77,7 +79,10 @@ namespace Whois.Servers
 
         private TokenMatcher CreateIanaTemplate()
         {
-            var matcher = new TokenMatcher();
+			LogProvider.IsDisabled = true;
+			var matcher = new TokenMatcher(new TokenizerOptions {
+                EnableLogging = false
+            });
             matcher.RegisterTransformer<CleanDomainStatusTransformer>();
             matcher.RegisterTransformer<ToHostNameTransformer>();
 
